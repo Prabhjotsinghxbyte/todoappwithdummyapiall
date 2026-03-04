@@ -1,35 +1,41 @@
-import { GetUserDetails } from "@/api/api";
+import { userLogin } from "@/api/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { UserContext } from "@/contextApi/UserContextProvider";
 import { useNavigate } from "react-router-dom";
-import { type User } from "@/contextApi/UserContextProvider";
+
+interface LoginFormData {
+  username: string;
+  password: string;
+}
 
 const Login = () => {
   const navigator = useNavigate();
-
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-  const [LoginUser, setLoginUser] = useState<User>(userInfo);
   const { setUserData } = useContext(UserContext)!;
-  const HandleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+
+  const userInfo = useMemo(
+    () => JSON.parse(localStorage.getItem("userInfo") || "{}"),
+    [localStorage.getItem("userInfo")],
+  );
+
+  const [LoginUser, setLoginUser] = useState<LoginFormData>({
+    ...userInfo,
+  });
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    GetUserDetails(LoginUser?.username, LoginUser?.password, null, null)
-      .then((LoginData) => {
-        if (LoginData.message) {
-          console.log(LoginData.message);
-        } else {
-          localStorage.clear;
-          localStorage.setItem("accessToken", LoginData.accessToken);
-          localStorage.setItem("refreshToken", LoginData.refreshToken);
-          localStorage.setItem("userInfo", JSON.stringify(LoginData));
-          setUserData(LoginData);
-        }
-      })
-      .then(() => {
-        navigator("/");
-      });
+    try {
+      const userResponse = await userLogin(LoginUser);
+      localStorage.clear();
+      localStorage.setItem("accessToken", userResponse.accessToken);
+      localStorage.setItem("refreshToken", userResponse.refreshToken);
+      setUserData(userResponse);
+      navigator("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -42,7 +48,7 @@ const Login = () => {
           </p>
         </div>
 
-        <form className="space-y-4" onSubmit={(e) => HandleSubmit(e)}>
+        <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-2">
             <label
               htmlFor="username"

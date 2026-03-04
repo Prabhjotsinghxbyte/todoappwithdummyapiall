@@ -35,7 +35,7 @@ const Navbar = () => {
               to="/"
               className="text-lg font-semibold text-gray-900 dark:text-white"
             >
-              Todos
+              Todos App
             </NavLink>
             <div className="flex items-center gap-2">
               <NavLink

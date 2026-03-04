@@ -1,58 +1,55 @@
+import type { ILogin } from "@/assets/Types";
+import axios from "axios";
 
+export const apiUrl = "https://dummyjson.com/";
 
-export const apiUrl = "https://dummyjson.com/"
+const userLogin = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}): Promise<ILogin> => {
+  const data = await axios.post(
+    `${apiUrl}/user/login`,
+    { username: username, password: password },
+    { headers: { "Content-Type": "application/json" } },
+  );
+  return data.data;
+};
 
-const GetUserDetails = async (username: string | null, password: string | null, accessToken: string | null, refreshToken: string | null) => {
-    if (accessToken || refreshToken) {
-        try {
+const GetUserDetails = async (
+  username: string | null,
+  password: string | null,
+  accessToken: string | null,
+  refreshToken: string | null,
+) => {
+  if (accessToken !== "undefined" || refreshToken !== "undefined") {
+    try {
+      const data = await axios.get(`${apiUrl}auth/me`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-            const data = await fetch(`${apiUrl}auth/me`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-                credentials: 'omit'
-            })
-                .then(res => res.json())
-            console.log("usingAccessToken", data)
-
-            return data
-
-        } catch {
-            console.log("data not fetch")
-        }
-
-    } else if (username && password) {
-        const data = await fetch(`${apiUrl}/user/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-
-                username: username,
-                password: password,
-
-            }),
-        })
-            .then(res => res.json())
-        console.log("api", data)
-        return data
+      console.log("usingAccessToken", data);
+      return data.data;
+    } catch (error) {
+      console.log("data not fetch", error);
     }
-}
-
-
+  } else if (username && password) {
+  }
+};
 
 const GetUserTodos = async (userId: number) => {
-    if (userId === null) {
-        throw new Error("Invalid userId");
-    }
-    const data = await fetch(`${apiUrl}users/${userId}/todos`)
-        .then(res => res.json())
+  if (userId === null) {
+    throw new Error("Invalid userId");
+  }
+  const data = await fetch(`${apiUrl}users/${userId}/todos`).then((res) =>
+    res.json(),
+  );
 
-    return (data)
-}
+  return data;
+};
 
-
-
-export { GetUserDetails }
-export { GetUserTodos }
-
+export { GetUserDetails, GetUserTodos, userLogin };

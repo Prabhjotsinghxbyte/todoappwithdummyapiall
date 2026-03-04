@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router";
 import { GetUserDetails } from "@/api/api";
-import { type User } from "@/assets/Types";
+import { type UserDetails } from "@/assets/Types";
 import { useState, useEffect } from "react";
 import DashboardCard from "@/components/DashboardCards";
 import { Spinner } from "@/components/ui/spinner";
 
 const Dashboard = () => {
   const navigator = useNavigate();
-  const [currentUserData, setCurrentUserData] = useState<User | null>(null);
+  const [currentUserData, setCurrentUserData] = useState<UserDetails | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,19 +25,17 @@ const Dashboard = () => {
             null,
             accessToken,
             refreshToken,
-          ).then((data) => {
-            if (data.message) {
-              console.log(data.message);
-              navigator("/login");
-            } else {
-              if (typeof data.id === "number") {
-                return data;
-              }
-            }
-          });
-          setCurrentUserData(fetchedUserData);
-        } catch {
-          console.log("error");
+          );
+
+          if (fetchedUserData && "id" in fetchedUserData) {
+            setCurrentUserData(fetchedUserData as UserDetails);
+          } else {
+            console.log("Invalid user data received");
+            navigator("/login");
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+          navigator("/login");
         }
       }
     };
