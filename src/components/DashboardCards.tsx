@@ -9,7 +9,7 @@ const DashboardCard = ({ title, iconPath, rows }: CardConfig) => (
           {icons[iconPath]}
         </span>
       </div>
-      <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+      <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
         {title}
       </h2>
     </div>

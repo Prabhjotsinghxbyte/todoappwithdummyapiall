@@ -28,11 +28,9 @@ const Dashboard = () => {
           if (fetchedUserData && "id" in fetchedUserData) {
             setCurrentUserData(fetchedUserData as UserDetails);
           } else {
-            console.log("Invalid user data received");
             navigator("/login");
           }
         } catch (error) {
-          console.error("Failed to fetch user data:", error);
           navigator("/login");
         }
       }
@@ -42,7 +40,7 @@ const Dashboard = () => {
 
   if (!currentUserData) {
     return (
-      <div className=" flex flex-col items-center justify-center h-full bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-6">
+      <div className=" flex h-full flex-col items-center justify-center bg-linear-to-br from-slate-50 via-sky-50 to-indigo-100 p-6 text-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-200">
         <Spinner />
         <span className="text-lg tabular-nums">Loding your Data</span>
       </div>
@@ -150,21 +148,21 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="h-full bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-6">
+    <div className="bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-6">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700 mb-6">
-        <div className="h-32 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        <div className="h-32 bg-linear-to-br from-blue-100 via-purple-200 to-rose-200 dark:bg-linear-to-r dark:from-blue-500 dark:via-purple-500 dark:to-pink-500"></div>
         <div className="px-6 pb-6">
           <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-16 mb-4 gap-4">
             <img
               src={currentUserData.image}
               alt={currentUserData.username}
-              className="w-28 h-28 rounded-full border-4 border-white dark:border-slate-800 shadow-lg object-cover bg-gray-200 dark:bg-slate-700"
+              className="w-28 h-28 rounded-full border-4 border-white dark:border-slate-800 shadow-lg object-cover bg-gray-200 dark:bg-slate-600"
             />
             <div className="text-center sm:text-left flex-1">
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
                 {currentUserData.firstName} {currentUserData.lastName}
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
+              <p className="text-slate-600 dark:text-slate-400 text-lg">
                 @{currentUserData.username}
               </p>
             </div>

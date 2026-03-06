@@ -7,29 +7,27 @@ import { useContext } from "react";
 import { UserContext } from "@/contextApi/UserContextProvider";
 
 const linkBase = "px-3 py-2 rounded-md transition-colors text-sm";
-const linkLight = "text-gray-700 hover:bg-gray-100";
-const linkDark = "dark:text-gray-100 dark:hover:bg-gray-800";
+const linkLight = "text-slate-700 hover:bg-slate-100";
+const linkDark = "dark:text-slate-200 dark:hover:bg-slate-800";
 
 const Navbar = () => {
   const navigator = useNavigate();
 
   const { userData, setUserData, logedin, setLogedin } =
-    useContext(UserContext)!;
+    useContext(UserContext);
 
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
-  console.log(logedin);
-
   return (
-    <nav className="w-full bg-white dark:bg-gray-900 border-b dark:border-gray-800">
+    <nav className="w-full border-b border-slate-200 bg-slate-50/95 dark:border-slate-700 dark:bg-slate-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
           <div className="flex items-center gap-6">
             <NavLink
               to="/"
-              className="text-lg font-semibold text-gray-900 dark:text-white"
+              className="text-lg font-semibold text-slate-900 dark:text-slate-100"
             >
               Todos App
             </NavLink>
@@ -37,14 +35,13 @@ const Navbar = () => {
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-gray-100 dark:bg-gray-800" : ""}`
+                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
                 }
               >
                 Home
               </NavLink>
             </div>
           </div>
-
           <div className="flex items-center gap-3">
             <div
               className={`${!logedin ? "flex items-center gap-2" : "hidden"}`}
@@ -52,7 +49,7 @@ const Navbar = () => {
               <NavLink
                 to="/login"
                 className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-gray-100 dark:bg-gray-800" : ""}`
+                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
                 }
               >
                 Login
@@ -60,7 +57,7 @@ const Navbar = () => {
               <NavLink
                 to="/signup"
                 className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-gray-100 dark:bg-gray-800" : ""}`
+                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
                 }
               >
                 Signup
@@ -72,23 +69,23 @@ const Navbar = () => {
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  ` ${isActive ? "bg-gray-100 dark:bg-gray-800" : ""}`
+                  `flex gap-2 items-center ${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
                 }
               >
-                <Button variant="outline">
-                  <img
-                    src={localStorage.getItem("image") || userData?.image}
-                    alt="Profile"
-                    className="h-6 w-6 rounded-full"
-                  />
-                  {userData?.firstName}
-                </Button>
+                <img
+                  src={localStorage.getItem("image") || userData?.image}
+                  alt="Profile"
+                  className="h-6 w-6 rounded-full"
+                />
+                {userData?.firstName}
               </NavLink>
-
               <Button
                 variant="outline"
                 onClick={() => {
-                  localStorage.clear();
+                  localStorage.removeItem("accessToken");
+                  localStorage.removeItem("refreshToken");
+                  localStorage.removeItem("image");
+                  localStorage.removeItem("userInfo");
                   setLogedin(false);
                   setUserData({
                     accessToken: "",

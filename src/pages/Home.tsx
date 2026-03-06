@@ -16,9 +16,9 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       const accessToken =
-        localStorage.getItem("accessToken") || userData?.accessToken;
+        localStorage.getItem("accessToken") || userData?.accessToken || "";
       const refreshToken =
-        localStorage.getItem("refreshToken") || userData?.accessToken;
+        localStorage.getItem("refreshToken") || userData?.accessToken || "";
       const tokens = accessToken || refreshToken;
 
       if (!tokens) {
@@ -48,7 +48,7 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-6 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="flex h-full flex-col items-center justify-center bg-linear-to-br from-slate-50 via-sky-50 to-indigo-100 p-6 text-slate-700 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-200">
         <Spinner />
         <span className="text-lg tabular-nums">Loading your data</span>
       </div>
@@ -56,7 +56,7 @@ const Home = () => {
   }
 
   return (
-    <section className="flex flex-col gap-6 h-full w-full items-center justify-center">
+    <section className="flex flex-col gap-6 h-full w-full items-center justify-center bg-linear-to-br from-slate-50 via-sky-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <h1 className="font-bold text-2xl">Todos List</h1>
       <div className="flex w-full max-w-xl flex-col gap-6">
         {todos.map((todo) => (
