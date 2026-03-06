@@ -13,16 +13,12 @@ const linkDark = "dark:text-gray-100 dark:hover:bg-gray-800";
 const Navbar = () => {
   const navigator = useNavigate();
 
-  const { userData, setUserData } = useContext(UserContext)!;
+  const { userData, setUserData, logedin, setLogedin } =
+    useContext(UserContext)!;
 
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
-
-  const logedin =
-    userData?.accessToken && typeof userData?.accessToken === "string"
-      ? true
-      : false;
 
   console.log(logedin);
 
@@ -81,7 +77,7 @@ const Navbar = () => {
               >
                 <Button variant="outline">
                   <img
-                    src={userData?.image}
+                    src={localStorage.getItem("image") || userData?.image}
                     alt="Profile"
                     className="h-6 w-6 rounded-full"
                   />
@@ -93,7 +89,19 @@ const Navbar = () => {
                 variant="outline"
                 onClick={() => {
                   localStorage.clear();
-                  setUserData(null);
+                  setLogedin(false);
+                  setUserData({
+                    accessToken: "",
+                    email: "",
+                    firstName: "",
+                    gender: "male",
+                    id: 0,
+                    image: "",
+                    lastName: "",
+                    refreshToken: "",
+                    username: "",
+                    password: "",
+                  });
                   navigator("/login");
                 }}
                 className={` ${linkLight} ${linkDark}`}

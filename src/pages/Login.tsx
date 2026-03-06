@@ -2,39 +2,38 @@ import { userLogin } from "@/api/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "@/contextApi/UserContextProvider";
 import { useNavigate } from "react-router-dom";
 
-interface LoginFormData {
-  username: string;
-  password: string;
-}
-
 const Login = () => {
   const navigator = useNavigate();
-  const { setUserData } = useContext(UserContext)!;
-
-  const userInfo = useMemo(
-    () => JSON.parse(localStorage.getItem("userInfo") || "{}"),
-    [localStorage.getItem("userInfo")],
-  );
-
-  const [LoginUser, setLoginUser] = useState<LoginFormData>({
-    ...userInfo,
-  });
-
+  const { setUserData, setLogedin } = useContext(UserContext)!;
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
     try {
-      const userResponse = await userLogin(LoginUser);
-      localStorage.clear();
-      localStorage.setItem("accessToken", userResponse.accessToken);
-      localStorage.setItem("refreshToken", userResponse.refreshToken);
-      setUserData(userResponse);
+      const apiResponse = await userLogin({ username, password });
+      if (apiResponse) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("image");
+        localStorage.removeItem("userInfo");
+      }
+      localStorage.setItem("accessToken", apiResponse.accessToken);
+      localStorage.setItem("refreshToken", apiResponse.refreshToken);
+      localStorage.setItem("image", apiResponse.image);
+      setUserData(apiResponse);
+      setLogedin(true);
       navigator("/");
     } catch (error) {
       console.error(error);
+      setErrorMessage("Login failed. Please check your username and password.");
     }
   };
 
@@ -58,13 +57,11 @@ const Login = () => {
             </label>
             <Input
               id="username"
+              name="username"
               type="text"
               placeholder="Enter your username"
-              value={LoginUser.username}
-              onChange={(e) =>
-                setLoginUser({ ...LoginUser, username: e.target.value })
-              }
               autoComplete="username"
+              required
             />
           </div>
 
@@ -77,20 +74,24 @@ const Login = () => {
             </label>
             <Input
               id="password"
+              name="password"
               type="password"
-              value={LoginUser.password}
-              onChange={(e) =>
-                setLoginUser({ ...LoginUser, password: e.target.value })
-              }
               autoComplete="password"
+              required
             />
           </div>
+          {errorMessage ? (
+            <p className="text-sm text-red-500" role="alert">
+              {errorMessage}
+            </p>
+          ) : null}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <input
-                type="checkbox"
                 id="remember"
+                type="checkbox"
+                name="remember"
                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                 checked
                 onChange={() => {}}
@@ -127,3 +128,4 @@ const Login = () => {
 };
 
 export default Login;
+

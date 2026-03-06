@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserContext } from "@/contextApi/UserContextProvider";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GetUserDetails } from "@/api/api";
+import { userLogin } from "@/api/api";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -14,27 +14,23 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 
-interface ChangePassword {
-  username: string;
-  resetKey: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 const ForgetModule = () => {
   const navigator = useNavigate();
 
   const [dilagOpen, setDialogOpen] = useState<boolean>(false);
 
-  const { setUserData } = useContext(UserContext);
+  const { setUserData, setLogedin } = useContext(UserContext);
 
-  const [inputValues, setInputValues] = useState<ChangePassword>({
-    username: "",
-    resetKey: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-  const passwordMatch = inputValues.newPassword === inputValues.confirmPassword;
+  const form = useRef<HTMLFormElement>(null);
+
+  const newPassword = (
+    form.current?.elements.namedItem("newPassword") as HTMLInputElement
+  )?.value as string;
+  const confirmPassword = (
+    form.current?.elements.namedItem("confirmPassword") as HTMLInputElement
+  )?.value as string;
+
+  const passwordMatch = newPassword === confirmPassword;
   const inputs = [
     {
       label: "User Name",
@@ -61,38 +57,39 @@ const ForgetModule = () => {
       placeholder: "Confirm Password",
     },
   ];
-  const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setInputValues((prev) => ({ ...prev, [id]: value }));
-    if (inputValues.newPassword !== inputValues.confirmPassword) {
-    }
-  };
 
   const HandleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputValues.newPassword !== inputValues.confirmPassword) {
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
+
+    if (newPassword !== confirmPassword) {
       setDialogOpen(true);
     } else {
-      GetUserDetails(
-        inputValues.username,
-        inputValues.username + "pass",
-        null,
-        null,
-      )
-        .then((LoginData) => {
-          if (LoginData.message) {
-            console.log(LoginData.message);
-          } else {
-            localStorage.clear();
-            localStorage.setItem("accessToken", LoginData.accessToken);
-            localStorage.setItem("refreshToken", LoginData.refreshToken);
-            setUserData(LoginData);
-          }
-        })
-        .then(() => {
-          setDialogOpen(true);
-          navigator("/");
-        });
+      const logindata = {
+        username: username,
+        password: username + "pass",
+      };
+
+      try {
+        const apiResponse = await userLogin(logindata);
+
+        if (apiResponse) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("image");
+          localStorage.removeItem("userInfo");
+        }
+        localStorage.setItem("accessToken", apiResponse.accessToken);
+        localStorage.setItem("refreshToken", apiResponse.refreshToken);
+        localStorage.setItem("image", apiResponse.image);
+        setUserData(apiResponse);
+        setLogedin(true);
+        navigator("/");
+      } catch (error) {
+        console.error(error);
+        setDialogOpen(true);
+      }
     }
   };
 
@@ -107,7 +104,7 @@ const ForgetModule = () => {
           </p>
         </div>
 
-        <form className="space-y-4" onSubmit={HandleSubmit}>
+        <form className="space-y-4" ref={form} onSubmit={HandleSubmit}>
           <div className="space-y-2">
             {inputs.map((input) => (
               <div key={"l" + input.id}>
@@ -120,10 +117,9 @@ const ForgetModule = () => {
                 <Input
                   key={input.id}
                   id={input.id}
+                  name={input.id}
                   type={input.type}
                   placeholder={input.placeholder}
-                  value={inputValues[input.id as keyof ChangePassword]}
-                  onChange={HandleChange}
                   aria-invalid={
                     !passwordMatch && input.id === "confirmPassword"
                   }

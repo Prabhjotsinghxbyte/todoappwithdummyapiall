@@ -11,7 +11,7 @@ const userLogin = async ({
   password: string;
 }): Promise<ILogin> => {
   const data = await axios.post(
-    `${apiUrl}/user/login`,
+    `${apiUrl}user/login`,
     { username: username, password: password },
     { headers: { "Content-Type": "application/json" } },
   );
@@ -19,8 +19,6 @@ const userLogin = async ({
 };
 
 const GetUserDetails = async (
-  username: string | null,
-  password: string | null,
   accessToken: string | null,
   refreshToken: string | null,
 ) => {
@@ -37,7 +35,6 @@ const GetUserDetails = async (
     } catch (error) {
       console.log("data not fetch", error);
     }
-  } else if (username && password) {
   }
 };
 

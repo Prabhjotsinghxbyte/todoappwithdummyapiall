@@ -21,8 +21,6 @@ const Dashboard = () => {
       } else {
         try {
           const fetchedUserData = await GetUserDetails(
-            null,
-            null,
             accessToken,
             refreshToken,
           );

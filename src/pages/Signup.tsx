@@ -39,23 +39,24 @@ const fields = [
 export const Signup = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const form = e.currentTarget;
-      const email = (form.elements.namedItem("email") as HTMLInputElement)
-        .value;
-      const username = form.elements.namedItem("username") as HTMLInputElement;
-      const confirmPassword = form.elements.namedItem(
-        "confirmPassword",
-      ) as HTMLInputElement;
-      const password = form.elements.namedItem("password") as HTMLInputElement;
-      const data: newUser = {
-        id: Date.now(),
-        email: String(email),
-        username: String(username),
-        password: String(password),
-        confirmPassword: String(confirmPassword),
-      };
-    } catch (error) {}
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const username = (form.elements.namedItem("username") as HTMLInputElement)
+      .value;
+    const confirmPassword = (
+      form.elements.namedItem("confirmPassword") as HTMLInputElement
+    ).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
+    const data: newUser = {
+      id: Date.now(),
+      email,
+      username,
+      password,
+      confirmPassword,
+    };
+
+    console.log("signup form data", data);
   };
 
   return (
