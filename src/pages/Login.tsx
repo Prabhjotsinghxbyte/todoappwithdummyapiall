@@ -42,43 +42,22 @@ const Login = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg border shadow-sm">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Welcome back</h1>
-          <p className="text-muted-foreground">
-            Enter your credentials to access your account
-          </p>
+          <p className="text-muted-foreground">Enter your credentials to access your account</p>
         </div>
 
         <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
           <div className="space-y-2">
-            <label
-              htmlFor="username"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
+            <label htmlFor="username" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Username
             </label>
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Enter your username"
-              autoComplete="username"
-              required
-            />
+            <Input id="username" name="username" type="text" placeholder="Enter your username" autoComplete="username" required />
           </div>
 
           <div className="space-y-2">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
+            <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Password
             </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="password"
-              required
-            />
+            <Input id="password" name="password" type="password" autoComplete="password" required />
           </div>
           {errorMessage ? (
             <p className="text-sm text-red-500" role="alert">
@@ -96,17 +75,11 @@ const Login = () => {
                 checked
                 onChange={() => {}}
               />
-              <label
-                htmlFor="remember"
-                className="text-sm text-muted-foreground"
-              >
+              <label htmlFor="remember" className="text-sm text-muted-foreground">
                 Remember me
               </label>
             </div>
-            <Link
-              to="/forgetpassword"
-              className="text-sm text-primary hover:underline"
-            >
+            <Link to="/forgetpassword" className="text-sm text-primary hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -128,4 +101,3 @@ const Login = () => {
 };
 
 export default Login;
-

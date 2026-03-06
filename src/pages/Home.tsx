@@ -15,10 +15,8 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const accessToken =
-        localStorage.getItem("accessToken") || userData?.accessToken || "";
-      const refreshToken =
-        localStorage.getItem("refreshToken") || userData?.accessToken || "";
+      const accessToken = localStorage.getItem("accessToken") || userData?.accessToken || "";
+      const refreshToken = localStorage.getItem("refreshToken") || userData?.accessToken || "";
       const tokens = accessToken || refreshToken;
 
       if (!tokens) {
@@ -61,25 +59,14 @@ const Home = () => {
       <div className="flex w-full max-w-xl flex-col gap-6">
         {todos.map((todo) => (
           <Item variant={"outline"} key={`todo-${todo.id}`}>
-            <ItemContent className={todo.completed ? "line-through" : ""}>
-              {todo.todo}
-            </ItemContent>
+            <ItemContent className={todo.completed ? "line-through" : ""}>{todo.todo}</ItemContent>
             <Checkbox
               checked={todo.completed}
               onCheckedChange={() => {
-                setTodos((prev) =>
-                  prev.map((t) =>
-                    t.id === todo.id ? { ...t, completed: !t.completed } : t,
-                  ),
-                );
+                setTodos((prev) => prev.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t)));
               }}
             />
-            <CustomDilogbox
-              id={todo.id}
-              Trigger={"Edit"}
-              Title={"Edit Todo"}
-              Deccription={"Edit your todo"}
-            />
+            <CustomDilogbox id={todo.id} Trigger={"Edit"} Title={"Edit Todo"} Deccription={"Edit your todo"} />
             <CustomDilogbox
               id={todo.id}
               Trigger={"Delete"}
@@ -91,12 +78,7 @@ const Home = () => {
         ))}
       </div>
       <Item variant={"outline"} className="max-w-3xs">
-        <CustomDilogbox
-          id={"new"}
-          Trigger={"Add New Todo"}
-          Title={"Add New Todo"}
-          Deccription={"Add new todo to your list"}
-        />
+        <CustomDilogbox id={"new"} Trigger={"Add New Todo"} Title={"Add New Todo"} Deccription={"Add new todo to your list"} />
       </Item>
     </section>
   );

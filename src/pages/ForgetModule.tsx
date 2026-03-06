@@ -23,12 +23,8 @@ const ForgetModule = () => {
 
   const form = useRef<HTMLFormElement>(null);
 
-  const newPassword = (
-    form.current?.elements.namedItem("newPassword") as HTMLInputElement
-  )?.value as string;
-  const confirmPassword = (
-    form.current?.elements.namedItem("confirmPassword") as HTMLInputElement
-  )?.value as string;
+  const newPassword = (form.current?.elements.namedItem("newPassword") as HTMLInputElement)?.value as string;
+  const confirmPassword = (form.current?.elements.namedItem("confirmPassword") as HTMLInputElement)?.value as string;
 
   const passwordMatch = newPassword === confirmPassword;
   const inputs = [
@@ -98,20 +94,14 @@ const ForgetModule = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-lg border shadow-sm">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Forgot Password</h1>
-          <p className="text-muted-foreground">
-            Enter your email address and we'll send you a OTP to reset your
-            password
-          </p>
+          <p className="text-muted-foreground">Enter your email address and we'll send you a OTP to reset your password</p>
         </div>
 
         <form className="space-y-4" ref={form} onSubmit={HandleSubmit}>
           <div className="space-y-2">
             {inputs.map((input) => (
               <div key={"l" + input.id}>
-                <label
-                  htmlFor={input.id}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
+                <label htmlFor={input.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {input.label}
                 </label>
                 <Input
@@ -120,28 +110,20 @@ const ForgetModule = () => {
                   name={input.id}
                   type={input.type}
                   placeholder={input.placeholder}
-                  aria-invalid={
-                    !passwordMatch && input.id === "confirmPassword"
-                  }
+                  aria-invalid={!passwordMatch && input.id === "confirmPassword"}
                 />
               </div>
             ))}
             <AlertDialog open={dilagOpen}>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    {passwordMatch ? "Password Changed" : "Password not match"}
-                  </AlertDialogTitle>
+                  <AlertDialogTitle>{passwordMatch ? "Password Changed" : "Password not match"}</AlertDialogTitle>
                   <AlertDialogDescription>
-                    {passwordMatch
-                      ? "Your new password is set"
-                      : "Type Same New Password And Confirm Password"}
+                    {passwordMatch ? "Your new password is set" : "Type Same New Password And Confirm Password"}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setDialogOpen(false)}>
-                    Ok
-                  </AlertDialogCancel>
+                  <AlertDialogCancel onClick={() => setDialogOpen(false)}>Ok</AlertDialogCancel>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
@@ -153,9 +135,7 @@ const ForgetModule = () => {
         </form>
 
         <div className="text-center text-sm">
-          <span className="text-muted-foreground">
-            Remember your password?{" "}
-          </span>
+          <span className="text-muted-foreground">Remember your password? </span>
           <Link to="/login" className="text-primary hover:underline">
             Back to Login
           </Link>

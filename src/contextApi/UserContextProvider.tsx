@@ -1,11 +1,5 @@
 import type { ILogin } from "@/assets/Types";
-import {
-  useState,
-  createContext,
-  type ReactNode,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useState, createContext, type ReactNode, type Dispatch, type SetStateAction } from "react";
 
 interface TodoData {
   id: number;
@@ -32,9 +26,7 @@ export const UserContext = createContext<UserContextType>({
 });
 
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
-  const [logedin, setLogedin] = useState<boolean>(
-    localStorage.getItem("accessToken") ? true : false,
-  );
+  const [logedin, setLogedin] = useState<boolean>(localStorage.getItem("accessToken") ? true : false);
 
   const [userData, setUserData] = useState<ILogin>({
     accessToken: "",
@@ -50,13 +42,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
   });
   const [todos, setTodos] = useState<TodoData[]>([]);
 
-  return (
-    <UserContext.Provider
-      value={{ userData, setUserData, todos, setTodos, logedin, setLogedin }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ userData, setUserData, todos, setTodos, logedin, setLogedin }}>{children}</UserContext.Provider>;
 };
 
 export default UserContextProvider;

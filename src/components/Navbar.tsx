@@ -13,8 +13,7 @@ const linkDark = "dark:text-slate-200 dark:hover:bg-slate-800";
 const Navbar = () => {
   const navigator = useNavigate();
 
-  const { userData, setUserData, logedin, setLogedin } =
-    useContext(UserContext);
+  const { userData, setUserData, logedin, setLogedin } = useContext(UserContext);
 
   const { theme, setTheme } = useTheme();
 
@@ -25,58 +24,37 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
           <div className="flex items-center gap-6">
-            <NavLink
-              to="/"
-              className="text-lg font-semibold text-slate-900 dark:text-slate-100"
-            >
+            <NavLink to="/" className="text-lg font-semibold text-slate-900 dark:text-slate-100">
               Todos App
             </NavLink>
             <div className="flex items-center gap-2">
               <NavLink
                 to="/"
-                className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
-                }
-              >
+                className={({ isActive }) => `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`}>
                 Home
               </NavLink>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div
-              className={`${!logedin ? "flex items-center gap-2" : "hidden"}`}
-            >
+            <div className={`${!logedin ? "flex items-center gap-2" : "hidden"}`}>
               <NavLink
                 to="/login"
-                className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
-                }
-              >
+                className={({ isActive }) => `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`}>
                 Login
               </NavLink>
               <NavLink
                 to="/signup"
-                className={({ isActive }) =>
-                  `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
-                }
-              >
+                className={({ isActive }) => `${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`}>
                 Signup
               </NavLink>
             </div>
-            <div
-              className={`${logedin ? "flex items-center gap-2" : "hidden"}`}
-            >
+            <div className={`${logedin ? "flex items-center gap-2" : "hidden"}`}>
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
                   `flex gap-2 items-center ${linkBase} ${linkLight} ${linkDark} ${isActive ? "bg-slate-100 dark:bg-slate-800" : ""}`
-                }
-              >
-                <img
-                  src={localStorage.getItem("image") || userData?.image}
-                  alt="Profile"
-                  className="h-6 w-6 rounded-full"
-                />
+                }>
+                <img src={localStorage.getItem("image") || userData?.image} alt="Profile" className="h-6 w-6 rounded-full" />
                 {userData?.firstName}
               </NavLink>
               <Button
@@ -101,17 +79,11 @@ const Navbar = () => {
                   });
                   navigator("/login");
                 }}
-                className={` ${linkLight} ${linkDark}`}
-              >
+                className={` ${linkLight} ${linkDark}`}>
                 Logout
               </Button>
             </div>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={toggleTheme}
-              className="relative"
-            >
+            <Button variant="outline" size="icon-sm" onClick={toggleTheme} className="relative">
               <Sun className="h-4 w-4 transition-all dark:scale-0 dark:-rotate-90" />
               <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
             </Button>
